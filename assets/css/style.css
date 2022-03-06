@@ -1,0 +1,35 @@
+:root {
+    --primary-color:#d9e7e4;
+    --secondary-color: #a1c4bd;
+    --tertiary-color: #285249;
+    --text-shadow: 1px 1px 10px rgba(25, 19, 0, 0.5);
+    --text-hover: 1px 2px 3px #261c00;
+}
+
+* {
+    border: 2px solid black;
+    padding: 2px;
+    margin: 2px;
+    text-align: center;
+    background-color: var(--primary-color);
+}
+
+header, main, footer {
+    background-color: var(--secondary-color);
+}
+
+h1, h2, h3 {
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
+    text-shadow: var(--text-shadow);
+}
+
+.scores, .answers {
+    list-style: none;
+}
+
+.start-btn {
+    background-color: red;
+    color: var(--primary-color);
+}
+
