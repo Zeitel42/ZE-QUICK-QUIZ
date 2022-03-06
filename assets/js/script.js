@@ -109,5 +109,5 @@ function timeDown(){
 
 // timer start
 
-// startButton.addEventListener("click", timerInterval);
-startButton.addEventListener("click", randoQuest);
+startButton.addEventListener("click", timerInterval);
+// startButton.addEventListener("click", randoQuest);
