@@ -1,4 +1,5 @@
 // target html elements here
+var timerHead = document.querySelector(".timerHead");
 var clock = document.querySelector(".clock");
 var startButton = document.querySelector(".start-btn");
 var questionsText = document.querySelector(".questions-text");
@@ -6,9 +7,10 @@ var buttonsList = document.querySelector(".buttonsList");
 
 
 // declare global variables here
-var timer = 15;
+var timer;
 var timeDown;
-var newQuestion = 0;
+var timeCount;
+var newQuestion;
 var ulListEl;
 var listItemEl;
 var buttonArray = [];
@@ -18,6 +20,12 @@ var buttonThree;
 var buttonFour;
 var correctButton = 0;
 var incorrectButton = 0;
+var buttonPlayAgain;
+var highScores;
+var yourScore;
+var initialsForm;
+var initialsText;
+var initialsSubmit;
 
 // //  array of questions and answers
 var questions = [
@@ -91,32 +99,41 @@ var questions = [
 
 // start game 
 startButton.addEventListener("click", startGame);
+
 function startGame(){
     startButton.style.display = "block";
-    setInterval(timeDown, 1000);
+    questionsText.style.display = "block";
+    listItemEl.style.display = "block";
+    buttonPlayAgain.style.display = "none";
+    newQuestion = 0;
+    timer = 15;
+    timeCount = setInterval(timeDown, 1000);
+        
     questionFunction();
 };
+
+// countdown
 function timeDown(){
         timer;
         if(timer > 0){
             timer--;
-        }else{
-            return;
         }
-        if(timer <= 5){
-            clock.style.color = "yellow";
-            clock.style.fontSize = "30px";
+        else{
+            clearInterval(timeCount);
+            return endGame();
         }
-        if(timer <= 3){
-            clock.style.color = "red";
-            clock.style.fontSize = "40px";
-        }
-        
         clock.innerHTML = timer;  
 };
-// create elements
 
-// create ul li
+function createItem(element, className){
+    var newEl = document.createElement(element);
+    newEl.setAttribute("class", className);
+    return newEl;
+}
+
+var newButton = createItem("button", "newButton");
+console.log(newButton);
+// create ul li buttons
 
 ulListEl = document.createElement("ul");
 ulListEl.setAttribute("class", "ulListElName");
@@ -132,7 +149,13 @@ buttonTwo.setAttribute("class", "answerButton");
 buttonThree = document.createElement("button");
 buttonThree.setAttribute("class", "answerButton"); 
 buttonFour= document.createElement("button");
-buttonFour.setAttribute("class", "answerButton"); 
+buttonFour.setAttribute("class", "answerButton");
+
+buttonPlayAgain = document.createElement("button");
+buttonPlayAgain.setAttribute("class", "playAgainbtn"); 
+buttonPlayAgain.innerHTML = "Play Again?";
+buttonPlayAgain.addEventListener("click", startGame);
+ulListEl.appendChild(buttonPlayAgain);
 
 buttonsList.appendChild(ulListEl);
 ulListEl.appendChild(listItemEl);
@@ -141,14 +164,11 @@ listItemEl.appendChild(buttonTwo);
 listItemEl.appendChild(buttonThree);
 listItemEl.appendChild(buttonFour);
 
-
-
 // questions
 function questionFunction(){
     startButton.style.display = "none";
     var theQuestion = questions[newQuestion];
     questionsText.innerHTML = theQuestion.question;
-    console.log(theQuestion.question, newQuestion);
     answers();
 };
 
@@ -161,21 +181,24 @@ function answers(){
     buttonThree.innerHTML = buttonAnswer[2];
     buttonFour.innerHTML = buttonAnswer[3];
 };
+
 var checkAnswer;
 var buttonClick = document.querySelectorAll(".answerButton").forEach(element => {
     element.addEventListener("click", event => {
-       checkAnswer = element.innerHTML;
-       console.log(questions[newQuestion].correctAnswer);
-        rightOrWrong();  
+    checkAnswer = element.innerHTML;
+    rightOrWrong();
     })
 });
-
+// if correct do this, if incorrect do that
 function rightOrWrong(){
+
     if( checkAnswer === questions[newQuestion].answers[questions[newQuestion].correctAnswer]){
         timer = timer + 3;
-        listItemEl.style.transition= "background-color 0.25s ease-in";
         listItemEl.style.backgroundColor = "green";
-   
+        listItemEl.style.transition= "background-color 0.25s ease-out";
+        // listItemEl.style.backgroundColor = "transparent";
+        correctButton++;
+        console.log(correctButton);
     }else{
         listItemEl.style.transition= "background-color 0.25s ease-in";
         listItemEl.style.backgroundColor = "red";
@@ -186,16 +209,54 @@ function rightOrWrong(){
             timer = timer - 3;
         }
     }
-    console.log(questions.length);
     newQuestion++
-    questionFunction();
+
+    if(newQuestion + 1 > questions.length){
+
+           endGame();
+       }else{
+        questionFunction();
+       }
 };
 
 function endGame(){
-console.log('this is the end')
+    
+    listItemEl.style.display = "none";
+    questionsText.style.display = "none";
+    console.log('this is the end')
+    buttonPlayAgain.style.display = "block";
+
+    
+    console.log(correctButton, timer);
+    
+    clearInterval(timeCount);
+    if(timer > 1){
+    yourScore = correctButton * timer;
+    }else{
+        yourScore = correctButton;
+    }
+
+    clock.innerHTML = "Your Score: " + yourScore + " !";
+
+    timerHead.innerHTML = "Game Over";
+
+    scores();
+};
+function scores(){
+    
+    initialsForm = document.createElement("form");
+    initialsForm.setAttribute("action", "submit");
+    initialsText = document.createElement("input");
+    initialsText.setAttribute("type", "text");
+    initialsSubmit = document.createElement("input");
+    initialsSubmit.setAttribute("type", "submit");
+
+    ulListEl.appendChild(initialsForm);
+    initialsForm.appendChild(initialsText);
+    initialsForm.appendChild(initialsSubmit);
+
 
 }
-
 
 
 
