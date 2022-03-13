@@ -4,6 +4,8 @@ var clock = document.querySelector(".clock");
 var startButton = document.querySelector(".start-btn");
 var questionsText = document.querySelector(".questions-text");
 var buttonsList = document.querySelector(".buttonsList");
+var highScoresList = document.querySelector(".highScores");
+
 
 
 // declare global variables here
@@ -20,12 +22,15 @@ var buttonThree;
 var buttonFour;
 var correctButton = 0;
 var incorrectButton = 0;
-var buttonPlayAgain;
-var highScores;
 var yourScore;
 var initialsForm;
 var initialsText;
 var initialsSubmit;
+var submitButton;
+var highScores;
+var loadScores;
+var newScores;
+var newHighScore;
 
 // //  array of questions and answers
 var questions = [
@@ -104,7 +109,6 @@ function startGame(){
     startButton.style.display = "block";
     questionsText.style.display = "block";
     listItemEl.style.display = "block";
-    buttonPlayAgain.style.display = "none";
     newQuestion = 0;
     timer = 15;
     timeCount = setInterval(timeDown, 1000);
@@ -131,31 +135,23 @@ function createItem(element, className){
     return newEl;
 }
 
-var newButton = createItem("button", "newButton");
-console.log(newButton);
+// var newButton = createItem("button", "newButton");
+// console.log(newButton);
+
 // create ul li buttons
 
-ulListEl = document.createElement("ul");
-ulListEl.setAttribute("class", "ulListElName");
+ulListEl = createItem("ul", "ulListElName")
 ulListEl.style.display = "none";
-listItemEl = document.createElement("li");
-listItemEl.setAttribute("class", "listItemElName");
+listItemEl = createItem("li", "listItemElName")
 listItemEl.style.listStyle = "none";
 
-buttonOne = document.createElement("button");
-buttonOne.setAttribute("class", "answerButton"); 
-buttonTwo = document.createElement("button");
-buttonTwo.setAttribute("class", "answerButton"); 
-buttonThree = document.createElement("button");
-buttonThree.setAttribute("class", "answerButton"); 
-buttonFour= document.createElement("button");
-buttonFour.setAttribute("class", "answerButton");
+buttonOne = createItem("button", "answerButton");
+buttonTwo = createItem("button", "answerButton");
+buttonThree = createItem("button", "answerButton");
+buttonFour= createItem("button", "answerButton");
+var playAgain = createItem("h3", "playAgainText");
+playAgain.innerHTML = "Play Again?";
 
-buttonPlayAgain = document.createElement("button");
-buttonPlayAgain.setAttribute("class", "playAgainbtn"); 
-buttonPlayAgain.innerHTML = "Play Again?";
-buttonPlayAgain.addEventListener("click", startGame);
-ulListEl.appendChild(buttonPlayAgain);
 
 buttonsList.appendChild(ulListEl);
 ulListEl.appendChild(listItemEl);
@@ -164,9 +160,12 @@ listItemEl.appendChild(buttonTwo);
 listItemEl.appendChild(buttonThree);
 listItemEl.appendChild(buttonFour);
 
+ulListEl.appendChild(playAgain);
+
 // questions
 function questionFunction(){
     startButton.style.display = "none";
+    playAgain.style.display = "none";
     var theQuestion = questions[newQuestion];
     questionsText.innerHTML = theQuestion.question;
     answers();
@@ -198,7 +197,6 @@ function rightOrWrong(){
         listItemEl.style.transition= "background-color 0.25s ease-out";
         // listItemEl.style.backgroundColor = "transparent";
         correctButton++;
-        console.log(correctButton);
     }else{
         listItemEl.style.transition= "background-color 0.25s ease-in";
         listItemEl.style.backgroundColor = "red";
@@ -223,11 +221,6 @@ function endGame(){
     
     listItemEl.style.display = "none";
     questionsText.style.display = "none";
-    console.log('this is the end')
-    buttonPlayAgain.style.display = "block";
-
-    
-    console.log(correctButton, timer);
     
     clearInterval(timeCount);
     if(timer > 1){
@@ -236,31 +229,63 @@ function endGame(){
         yourScore = correctButton;
     }
 
-    clock.innerHTML = "Your Score: " + yourScore + " !";
+    clock.innerHTML = "Your Score: " + yourScore + " ! Enter your initials to save your score!";
 
     timerHead.innerHTML = "Game Over";
 
     scores();
 };
+
 function scores(){
     
-    initialsForm = document.createElement("form");
-    initialsForm.setAttribute("action", "submit");
     initialsText = document.createElement("input");
     initialsText.setAttribute("type", "text");
-    initialsSubmit = document.createElement("input");
-    initialsSubmit.setAttribute("type", "submit");
+    initialsText.setAttribute("maxlength", "4");
 
-    ulListEl.appendChild(initialsForm);
-    initialsForm.appendChild(initialsText);
-    initialsForm.appendChild(initialsSubmit);
+    submitButton = createItem("button", "submitButton");
+    submitButton.innerHTML = "Save Score";
+    
+    ulListEl.appendChild(initialsText);
+    ulListEl.appendChild(submitButton);
 
+    submitButton.addEventListener("click", saveScore);
+    
+};
 
+function saveScore(){
+
+    submitScore = {
+    "name": initialsText.value,
+    "score": yourScore
+    }
+    
+    loadScores =  JSON.parse(localStorage.getItem('scores')) || [];
+
+    loadScores.push(submitScore);
+    console.log(loadScores);
+
+    var sortedScores = loadScores.sort(function(a, b){return b.score - a.score});
+    console.log(sortedScores);
+      
+    for(var i = 0; i < sortedScores.length; i++){
+        var scoreLi = createItem("li", "scoreLi");
+        scoreLi.innerHTML = sortedScores[i].name + " " + sortedScores[i].score;
+        scoreLi.style.listStyle = "none";
+        highScoresList.appendChild(scoreLi);
+    }
+    
+    newScores = localStorage.setItem("scores", JSON.stringify(sortedScores));
+    
+    playAgainFunction();
 }
 
-
-
-
+function playAgainFunction(){
+    initialsText.value = "";
+    initialsText.style.display = "none";
+    submitButton.style.display = "none";
+    playAgain.style.display = "block";
+    startButton.style.display = "block";
+}
 
 
 
