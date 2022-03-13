@@ -14,6 +14,6 @@ HTML, CSS, JavaScript
 # Website
 https://zeitel42.github.io/ZE-QUICK-QUIZ/
 
-<img src="./assets/images/quiz-scrnsht.png" alt="image of quiz game"> />
+<img src="./assets/images/quiz-scrnsht.png" alt="image of quiz game">
 
 ## Contributions made by Zeitel42 
