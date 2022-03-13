@@ -1,5 +1,4 @@
 // target html elements here
-var rules = document.querySelector(".rules");
 var timerHead = document.querySelector(".timerHead");
 var clock = document.querySelector(".clock");
 var startButton = document.querySelector(".start-btn");
@@ -36,62 +35,62 @@ var newHighScore;
 // //  array of questions and answers
 var questions = [
     {
-        question: "Which is a correct variable declaration?",
-        answers: ["var = ", "const !=", "let aName =", "All of the above"],
+        question: "How many licks to get to the center of a Tootsie Roll Tootsie Pop?",
+        answers: ["One lick", "Two licks", "Three licks", "All of the above"],
         correctAnswer: 2,
         questNumber: 0
     },
     {
-        question: "How do you comment out multiple lines?",
-        answers: ["/* */", "//", ".commentOut", "25"],
+        question: "What is the square root of 25?",
+        answers: ["5", "15", "12.5", "25"],
         correctAnswer: 0,
         questNumber: 1
     },
     {
-        question: "Which is not an operator?",
-        answers: ["+", "()", "/", "*"],
+        question: "Which planet in the Milky Way Galaxy is the hottest?",
+        answers: ["Uranus", "Venus", "Earth", "Mars"],
         correctAnswer: 1,
         questNumber: 2
     },
     {
-        question: "Which is a correct String?",
-        answers: ["Heath Ledger", '("Willem Dafoe")', '"Jack Nicholson"', "let = Joaquin Phoenix"],
+        question: "Who played the Joker in Tim Burton's Batman?",
+        answers: ["Heath Ledger", "Willem Dafoe", "Jack Nicholson", "Joaquin Phoenix"],
         correctAnswer: 2,
         questNumber: 3
     },
     {
-        question: "How do you add an item to the end of an array?",
-        answers: ["shift()", "pull()", "push()", "unshift()"],
+        question: "How many time outs per half are alloted to each NFL team?",
+        answers: ["One", "Two", "Three", "Four"],
         correctAnswer: 2,
         questNumber: 4
     },
     {
-        question: "How do you remove an item from the beginning of an array?",
-        answers: ["shift()", "pull()", "push()", "unshift()"],
+        question: "Who caught quarterback Brett Favre's first NFL completion?",
+        answers: ["Brett Farvre", "Jerry Rice", "Sterling Sharpe", "Steve Largeant"],
         correctAnswer: 0,
         questNumber: 5
     },
     {
-        question: "Which will randomize a whole number?",
-        answers: ["Math.random(Math.floor())", "Math.floor(Math.random())", "Math.random()", "Math.floor()"],
+        question: "How many days are in a leap year?",
+        answers: ["a. 365", "b. 366", "c. 367", "d. All of the above."],
         correctAnswer: 1,
         questNumber: 6
     },
     {
-        question: "What statement when added to a switch statement case will continue execution at next switch case?",
-        answers: ["break;", "lunchTime!;", "continue;", "All of the above."],
+        question: "What time is it? (according to the Spin Doctors)",
+        answers: ["4:30", "It's not late.", "Naw, naw, it's early", "All of the above."],
         correctAnswer: 0,
         questNumber: 7
     },
     {
-        question: "What does a boolean evaluate?",
-        answers: ["Simon or Garfunkle", "Beef or Beans", "True or False", "The Who"],
+        question: "Which of these acts didn't play at Woodstock?",
+        answers: ["Grateful Dead", "Jimi Hendrix", "The Rolling Stones", "The Who"],
         correctAnswer: 2,
         questNumber: 8
     },
     {
-        question: "Which comparison operator describes equal value and type?",
-        answers: ["===", "=", "==", "++++"],
+        question: "Who sang the song 'Who Are You?",
+        answers: ["a. The Who", "b. The Guess Who.", "c. Whomever", "d. All of the above."],
         correctAnswer: 0,
         questNumber: 9
     },
@@ -106,16 +105,12 @@ var questions = [
 // start game 
 startButton.addEventListener("click", startGame);
 
-
 function startGame(){
-    rules.style.display = "none";
-    clock.style.display = "block";
     startButton.style.display = "block";
     questionsText.style.display = "block";
     listItemEl.style.display = "block";
-    listItemEl.style.backgroundColor = "transparent";
     newQuestion = 0;
-    timer = 25;
+    timer = 15;
     timeCount = setInterval(timeDown, 1000);
         
     questionFunction();
@@ -134,13 +129,14 @@ function timeDown(){
         clock.innerHTML = timer;  
 };
 
-// create an element
-
 function createItem(element, className){
     var newEl = document.createElement(element);
     newEl.setAttribute("class", className);
     return newEl;
 }
+
+// var newButton = createItem("button", "newButton");
+// console.log(newButton);
 
 // create ul li buttons
 
@@ -175,7 +171,7 @@ function questionFunction(){
     answers();
 };
 
-// answer buttons
+// answers
 function answers(){
     ulListEl.style.display = "block";
     var buttonAnswer = questions[newQuestion].answers;
@@ -199,16 +195,16 @@ function rightOrWrong(){
         timer = timer + 3;
         listItemEl.style.backgroundColor = "green";
         listItemEl.style.transition= "background-color 0.25s ease-out";
-        
+        // listItemEl.style.backgroundColor = "transparent";
         correctButton++;
     }else{
+        listItemEl.style.transition= "background-color 0.25s ease-in";
         listItemEl.style.backgroundColor = "red";
-        listItemEl.style.transition= "background-color 0.25s ease-out";
         
         if(timer <= 3){
             timer = 1;
         }else{
-            timer = timer - 5;
+            timer = timer - 3;
         }
     }
     newQuestion++
@@ -221,7 +217,6 @@ function rightOrWrong(){
        }
 };
 
-// clears timer interval and shows user their score
 function endGame(){
     
     listItemEl.style.display = "none";
@@ -230,8 +225,6 @@ function endGame(){
     clearInterval(timeCount);
     if(timer > 1){
     yourScore = correctButton * timer;
-    }else if(timer === 1){
-        yourScore = correctButton + 2;
     }else{
         yourScore = correctButton;
     }
@@ -242,7 +235,7 @@ function endGame(){
 
     scores();
 };
-// enter initials to save score
+
 function scores(){
     
     initialsText = document.createElement("input");
@@ -258,7 +251,7 @@ function scores(){
     submitButton.addEventListener("click", saveScore);
     
 };
-// submit initials and score to localStorage
+
 function saveScore(){
 
     submitScore = {
@@ -285,12 +278,11 @@ function saveScore(){
     
     playAgainFunction();
 }
-// option to start again
+
 function playAgainFunction(){
     initialsText.value = "";
     initialsText.style.display = "none";
     submitButton.style.display = "none";
-    clock.style.display = "none";
     playAgain.style.display = "block";
     startButton.style.display = "block";
 }

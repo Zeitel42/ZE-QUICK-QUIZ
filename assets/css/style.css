@@ -24,6 +24,10 @@ h1, h2, h3 {
     text-shadow: var(--text-shadow);
 }
 
+.clock {
+    font-size: 40px;;
+}
+
 .scores, .answers {
     list-style: none;
 }
@@ -31,9 +35,31 @@ h1, h2, h3 {
 .start-btn {
     background-color: red;
     color: var(--primary-color);
+    padding: 4px 8px;
+    box-shadow: var(--text-shadow);
+    font-size: 25px;
+    text-shadow: var(--text-shadow);
 }
 
 .scoreLi:nth-of-type(1n+4){
     display: none;
 }
+
+.rules ul {
+    list-style: none;
+}
+
+.questions {
+    height: 100px;
+}
+.answerButton {
+    padding: 4px 8px;
+}
+
+.answerButton:hover{
+    box-shadow: var(--text-shadow);
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
+}
+
 
